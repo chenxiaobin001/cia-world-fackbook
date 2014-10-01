@@ -152,27 +152,13 @@ class Solution
   #check if is belong to a continent
   def is_belong_to?(country, target_continent)
     my_html = Nokogiri::HTML(country.country_doc)
-    doc = my_html.at("table tr td a[title = 'Notes and Definitions: Map references']")
+    doc = my_html.at("table tr td div.region1 a")
     belong = false
 
     if doc != nil then
-      if country.country_name == "France"    #due to html format inconsistence (corner case)
-        return false
-        doc.parent.parent.parent.next_element.css('span').each do |continent|
-          #        puts continent.parent.text
-          tmpstr = continent.text
-          if str_include?(tmpstr, target_continent)
-            #          puts "jajaja"
-            belong = true
-          end
-        end
-      else
-        continent = doc.parent.parent.parent.next_element.at('a').text
-        #      puts continent.downcase!
-        if str_include?(continent, target_continent)
-          #        puts "jajaja"
-          belong = true
-        end
+      region = doc.text
+      if str_include?(region, target_continent)
+        belong = true
       end
     end
     return belong
@@ -211,6 +197,7 @@ class Solution
     puts "getting countries\' elevation point in continent: '#{target_continent}':"
 
     @country_lists.each do |country|
+      puts country.country_name
       if is_belong_to?(country, target_continent) == true
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Elevation extremes']")
@@ -292,6 +279,6 @@ end
 s = Solution.new
 s.get_all_countries
 
-#s.s1_search_natural_hazards("South America", "earthquake")
-#s.s2_search_lowest_elevation_point("Europe")
-#s.s3_search_hemisphere("southeastern")
+s.s1_search_natural_hazards("South America", "earthquake")
+s.s2_search_lowest_elevation_point("Europe")
+s.s3_search_hemisphere("southeastern")
