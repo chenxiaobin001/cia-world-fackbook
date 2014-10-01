@@ -197,7 +197,7 @@ class Solution
     puts "getting countries\' elevation point in continent: '#{target_continent}':"
 
     @country_lists.each do |country|
-      puts country.country_name
+ #     puts country.country_name
       if is_belong_to?(country, target_continent) == true
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Elevation extremes']")
