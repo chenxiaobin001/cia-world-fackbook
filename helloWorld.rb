@@ -418,6 +418,36 @@ class Solution
 
   end
 
+  def s7_search_landlocked()
+    puts "==================================================================================="
+    puts "getting countries which is landlocked by a single country"
+    puts "-----------------------------------------------------------------------------------"
+    country_list = []
+    @country_lists.each do |key, array|
+      array.each do |country|
+        my_html = Nokogiri::HTML(country.country_doc)
+        doc = my_html.at("table tr td a[title='Notes and Definitions: Land boundaries']")
+        puts country.country_name
+        if doc != nil
+
+          items = doc.parent.parent.parent.next_element.at('td')
+          borders = items.at('div:contains("border countries:")')
+          next if borders == nil
+          borders = borders.at('span').text
+          borders.gsub!("km (", "km,")
+          border_lsit = borders.split('km,')
+          puts border_lsit
+          num =  border_lsit.length
+          if num == 1
+            country_list << country.country_name
+          end
+        end
+      end
+    end
+    country_list.sort!
+    country_list.each{ |x| puts x}
+    tmp = "finished"
+  end
 end
 
 
@@ -431,5 +461,6 @@ s.get_all_countries
 #s.s3_search_hemisphere("southerneast")
 #s.s4_search_party_number("Asia", 10)
 #s.s5_search_top_electricity_consumption(5)
-s.s6_search_domain_region(true, 80)
-s.s6_search_domain_region(false, 50)
+#s.s6_search_domain_region(true, 80)
+#s.s6_search_domain_region(false, 50)
+s.s7_search_landlocked()
