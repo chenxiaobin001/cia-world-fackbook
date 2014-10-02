@@ -381,6 +381,43 @@ class Solution
     end
     tmp = "finished"
   end
+
+  def s6_search_domain_region(moreThan, percentage)
+    direct = "more than"
+    if moreThan == false
+      direct = "less than"
+    end
+    puts "==================================================================================="
+    puts "getting countries with domain religion '#{direct}' #{percentage}: %"
+    puts "-----------------------------------------------------------------------------------"
+    country_list = []
+    @country_lists.each do |key, array|
+      array.each do |country|
+        my_html = Nokogiri::HTML(country.country_doc)
+        doc = my_html.at("table tr td a[title='Notes and Definitions: Religions']")
+        puts country.country_name
+        if doc != nil
+          tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(',')
+          rel = tmpText[0].match(/\s*[a-zA-Z]+\s*/m).to_s
+          per = tmpText[0].match(/\d+.?\d+/).to_s.to_f
+          if moreThan
+            if per > percentage
+              country_list << (CountryComparable.new(country.country_name, per))
+            end
+          else
+            if per < percentage
+              country_list << (CountryComparable.new(country.country_name, per))
+            end
+          end
+        end
+      end
+    end
+    country_list.sort!
+    country_list.each { |c| puts c.country_name + " " + c.country_value.to_s}
+    tmp = "finished"
+
+  end
+
 end
 
 
@@ -389,8 +426,9 @@ s = Solution.new
 s.get_all_countries
 
 #puts country_lists.keys
-s.s1_search_natural_hazards("South America", "earthquake")
-s.s2_search_lowest_elevation_point("Europe")
-s.s3_search_hemisphere("southerneast")
-s.s4_search_party_number("Asia", 10)
-s.s5_search_top_electricity_consumption(5)
+#s.s1_search_natural_hazards("South America", "earthquake")
+#s.s2_search_lowest_elevation_point("Europe")
+#s.s3_search_hemisphere("southerneast")
+#s.s4_search_party_number("Asia", 10)
+#s.s5_search_top_electricity_consumption(5)
+s.s6_search_domain_region(true, 60)
