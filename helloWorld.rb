@@ -12,22 +12,22 @@ require 'uri'
 
 # a class to record a country name and elevation point
 
-class CountryElev
+class CountryComparable
   include Comparable
   attr_accessor :country_name
-  attr_accessor :country_elev_point
+  attr_accessor :country_value
 
   def <=>(that)
-    country_elev_point <=> that.country_elev_point
+    country_value <=> that.country_value
   end
 
-  def initialize(country_name, country_elev_point)
+  def initialize(country_name, country_value)
     @country_name = country_name
-    @country_elev_point = country_elev_point
+    @country_value = country_value
   end
 
   def to_s()
-    return (country_name.to_s + "  " + country_elev_point.to_s)
+    return (country_name.to_s + "  " + country_value.to_s)
   end
 
 end
@@ -228,7 +228,7 @@ class Solution
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s
           elev_point = (tmpText[/-?\d+/]).to_i
-          country_list << (CountryElev.new(country.country_name.to_s, elev_point))
+          country_list << (CountryComparable.new(country.country_name.to_s, elev_point))
         end
       end
     end
@@ -239,7 +239,7 @@ class Solution
 =end
     min_elevation = country_list.min()
     #    puts min_elevation.country_elev_point
-    result_list = country_list.select{|x| x.country_elev_point == min_elevation.country_elev_point}
+    result_list = country_list.select{|x| x.country_value == min_elevation.country_value}
 
     puts "in continent: #{target_continent}, these countries have lowest elevation:"
     result_list.each do |c|
@@ -313,6 +313,34 @@ class Solution
 
   end
 
+  def s5_search_top_electricity_consumption_per_capita(topNumber)
+    puts "========================================================================"
+    puts "getting top #{topNumber} countries with highest electricity consumption per capita:"
+    country_lists = []
+    @country_lists.each do |key, array|
+      array.each do |country|
+        my_html = Nokogiri::HTML(country.country_doc)
+        doc = my_html.at("table tr td a[title='Notes and Definitions: Geographic coordinates']")
+        if doc != nil
+          tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(',')
+          if tmpText != nil
+            latitude = Latitude.new((tmpText[0][/[NS]/]).to_s, (tmpText[0][/\d+/]).to_i)
+            longitude = Longitude.new((tmpText[1][/[EW]/]).to_s, (tmpText[0][/\d+/]).to_i)
+            #     print latitude.to_s
+            #     print longitude.to_s
+            gc = GeographicCoordinates.new(latitude, longitude)
+            #     puts get_hemisphere(gc)
+            if !!get_hemisphere(gc).match(/#{geo}/i)
+              country_list << country.country_name
+              puts country.country_name
+            end
+          end
+        end
+      end
+    end
+
+
+  end
 end
 
 
@@ -320,7 +348,7 @@ s = Solution.new
 s.get_all_countries
 
 #puts country_lists.keys
-#s.s1_search_natural_hazards("South America", "earthquake")
-#s.s2_search_lowest_elevation_point("Europe")
-#s.s3_search_hemisphere("southeastern")
+s.s1_search_natural_hazards("South America", "earthquake")
+s.s2_search_lowest_elevation_point("Europe")
+s.s3_search_hemisphere("southeastern")
 s.s4_search_party_number("Asia", 10)
