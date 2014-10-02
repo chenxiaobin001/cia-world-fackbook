@@ -312,12 +312,15 @@ class Solution
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('td')
           text1 = ""
+          n = 0
           tmpText.css('div').each do |t|
+            n += 1
             text1 += t.text
             text1 += " "
           end
           #  puts text1.scan(/\[[^\[\]]*\]/m).to_s
           num = text1.scan(/\[[^\[\]]*\]/m).size
+          num = num > n ? num : n         #macau
           if num > number
             puts country.country_name
             country_list << country.country_name
@@ -374,6 +377,6 @@ s.s1_search_natural_hazards("South America", "earthquake")
 s.s2_search_lowest_elevation_point("Europe")
 s.s3_search_hemisphere("southerneast")
 s.s4_search_party_number("Asia", 10)
-#s.s5_search_top_electricity_consumption(5)
+s.s5_search_top_electricity_consumption(5)
 a = 1
 puts a
