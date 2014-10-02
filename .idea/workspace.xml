@@ -12,7 +12,7 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/helloWorld@helloWorld.coverage" NAME="helloWorld Coverage Results" MODIFIED="1412260557769" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="helloWorld" />
+    <SUITE FILE_PATH="coverage/helloWorld@helloWorld.coverage" NAME="helloWorld Coverage Results" MODIFIED="1412279757187" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="helloWorld" />
     <SUITE FILE_PATH="coverage/helloWorld@IRB_console__helloWorld.coverage" NAME="IRB console: helloWorld Coverage Results" MODIFIED="1412126387797" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="helloWorld" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -30,8 +30,8 @@
       <file leaf-file-name="helloWorld.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/helloWorld.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.79591835" vertical-offset="2154" max-vertical-offset="2940">
-              <caret line="442" column="13" selection-start-line="442" selection-start-column="13" selection-end-line="442" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.7755102" vertical-offset="2373" max-vertical-offset="3015">
+              <caret line="456" column="0" selection-start-line="456" selection-start-column="0" selection-end-line="456" selection-end-column="0" />
               <folding>
                 <element signature="e#577#768#0" expanded="false" />
                 <element signature="e#770#963#0" expanded="false" />
@@ -364,7 +364,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="ruby-line">
           <url>file://$PROJECT_DIR$/helloWorld.rb</url>
-          <line>459</line>
+          <line>464</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="ruby-line">
@@ -788,8 +788,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/helloWorld.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.79591835" vertical-offset="2154" max-vertical-offset="2940">
-          <caret line="442" column="13" selection-start-line="442" selection-start-column="13" selection-end-line="442" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.7755102" vertical-offset="2373" max-vertical-offset="3015">
+          <caret line="456" column="0" selection-start-line="456" selection-start-column="0" selection-end-line="456" selection-end-column="0" />
           <folding>
             <element signature="e#577#768#0" expanded="false" />
             <element signature="e#770#963#0" expanded="false" />

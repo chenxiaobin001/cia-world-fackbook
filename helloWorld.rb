@@ -427,7 +427,7 @@ class Solution
       array.each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Land boundaries']")
-        puts country.country_name
+     #   puts country.country_name
         if doc != nil
 
           items = doc.parent.parent.parent.next_element.at('td')
@@ -436,9 +436,14 @@ class Solution
           borders = borders.at('span').text
           borders.gsub!("km (", "km,")
           border_lsit = borders.split('km,')
-          puts border_lsit
+     #     puts border_lsit
           num =  border_lsit.length
           if num == 1
+            doc = my_html.at("table tr td a[title='Notes and Definitions: Location']")
+            txt = doc.parent.parent.parent.next_element.at('div').text
+            txt.downcase!
+            key_word = ["peninsula", "sea", "island", "gulf", "ocean"]
+            next if key_word.any?{ |x| txt.include?(x) }
             country_list << country.country_name
           end
         end
