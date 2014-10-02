@@ -106,7 +106,7 @@ class Solution
       country_url =  @CIA_URL
       new_url = (country_url.split('/')[0..-2]).join('/')
       country_url = new_url << '/' << item['href']
-   #   puts "#{country_name}"
+      puts "#{country_name}"
       f = open(country_url)
       doc = f.read()
       f.close()
@@ -117,6 +117,11 @@ class Solution
         @country_lists[continent] += [country]
       end
     end
+    puts "========================================================================"
+    puts "========================================================================"
+    puts "==============================start parsing============================="
+    puts "========================================================================"
+    puts "========================================================================"
   end
 
   # print all countries
@@ -285,8 +290,8 @@ class Solution
     puts "getting countries\' that have #{number} parties in continent: '#{target_continent}':"
     target_continent.downcase!
     if @country_lists.has_key?(target_continent)
-      @country_lists[target_continent].each do |country|
-        puts country.country_name
+      @country_lists[target_continent].each { |country|
+     #   puts country.country_name
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Political parties and leaders']")
         if doc != nil
@@ -296,9 +301,14 @@ class Solution
             text1 += t.text
             text1 += " "
           end
-          puts text1
+          #  puts text1.scan(/\[[^\[\]]*\]/m).to_s
+          num = text1.scan(/\[[^\[\]]*\]/m).size
+          if num >= number
+            country_list << country.country_name
+          end
         end
-      end
+      }
+      country_list
     end
 
   end
@@ -310,7 +320,7 @@ s = Solution.new
 s.get_all_countries
 
 #puts country_lists.keys
-s.s1_search_natural_hazards("South America", "earthquake")
-s.s2_search_lowest_elevation_point("Europe")
-s.s3_search_hemisphere("southeastern")
-#s.s4_search_party_number("Asia", 10)
+#s.s1_search_natural_hazards("South America", "earthquake")
+#s.s2_search_lowest_elevation_point("Europe")
+#s.s3_search_hemisphere("southeastern")
+s.s4_search_party_number("Asia", 10)
