@@ -206,8 +206,9 @@ class Solution
   #search for natural hazards
   def s1_search_natural_hazards(target_continent, target_word)
     continent_country_lists = []
-    puts "========================================================================"
+    puts "==================================================================================="
     puts "getting countries in continent: '#{target_continent}'that are prone to natural hazard'#{target_word}':"
+    puts "-----------------------------------------------------------------------------------"
     target_continent.downcase!
     if @country_lists.has_key?(target_continent)
       @country_lists[target_continent].each do |country|
@@ -230,8 +231,9 @@ class Solution
 
   def s2_search_lowest_elevation_point(target_continent)
     country_list = []
-    puts "========================================================================"
+    puts "==================================================================================="
     puts "getting countries\' elevation point in continent: '#{target_continent}':"
+    puts "-----------------------------------------------------------------------------------"
     target_continent.downcase!
     if @country_lists.has_key?(target_continent)
       @country_lists[target_continent].each do |country|
@@ -262,11 +264,12 @@ class Solution
   end
 
   def s3_search_hemisphere(hemisphere)
-    puts "========================================================================"
+    puts "==================================================================================="
     puts "east west line: 160E 20W"
     puts "north south line: equator"
     country_list = []
     puts "getting countries in'#{hemisphere}' hemisphere..."
+    puts "-----------------------------------------------------------------------------------"
     la = hemisphere[/south|north/i].to_s
     lo = hemisphere[/west|east/i].to_s
     geo = la + lo
@@ -301,8 +304,9 @@ class Solution
     #/\[[^\[]*\]/m
     #/\[[^\[\]]*\]/m
     country_list = []
-    puts "========================================================================"
+    puts "==================================================================================="
     puts "getting countries\' that have more than #{number} parties in continent: '#{target_continent}':"
+    puts "-----------------------------------------------------------------------------------"
     target_continent.downcase!
     if @country_lists.has_key?(target_continent)
       @country_lists[target_continent].each { |country|
@@ -334,20 +338,22 @@ class Solution
 
   #per captia
   def s5_search_top_electricity_consumption(topNumber)
-    puts "========================================================================"
+    puts "==================================================================================="
     puts "getting top #{topNumber} countries with highest electricity consumption per capita:"
+    puts "-----------------------------------------------------------------------------------"
     country_lists = []
     @country_lists.each do |key, array|
       array.each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Electricity - consumption']")
-        puts country.country_name
+    #    puts country.country_name
+        num = 0
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(' ')
-          print tmpText[0], tmpText[1]
+     #     print tmpText[0], tmpText[1]
           num = tmpText[0].gsub(',','').to_f
           num = compute_consumption(num, tmpText[1].to_s)
-          puts num
+     #     puts num
         end
 
         doc = my_html.at("table tr td a[title='Notes and Definitions: Population']")
@@ -355,7 +361,7 @@ class Solution
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(' ')
           population = tmpText[0].gsub(',','').to_f
-          puts population
+     #     puts population
         end
         result = 0
         if population != 0
@@ -363,6 +369,15 @@ class Solution
         end
         country_lists << (CountryComparable.new(country.country_name, result))
       end
+    end
+    country_lists.sort!().reverse!()
+
+    i = 0
+    result_lists = []
+    while i < topNumber
+      result_lists << country_lists[i]
+      puts country_lists[i]
+      i += 1
     end
     tmp = "finished"
   end
@@ -378,5 +393,3 @@ s.s2_search_lowest_elevation_point("Europe")
 s.s3_search_hemisphere("southerneast")
 s.s4_search_party_number("Asia", 10)
 s.s5_search_top_electricity_consumption(5)
-a = 1
-puts a
