@@ -395,11 +395,11 @@ class Solution
       array.each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Religions']")
-        puts country.country_name
+    #    puts country.country_name
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(',')
           rel = tmpText[0].match(/\s*[a-zA-Z]+\s*/m).to_s
-          per = tmpText[0].match(/\d+.?\d+/).to_s.to_f
+          per = tmpText.to_s.match(/\d+.?\d+/).to_s.to_f
           if moreThan
             if per > percentage
               country_list << (CountryComparable.new(country.country_name, per))
@@ -431,4 +431,5 @@ s.get_all_countries
 #s.s3_search_hemisphere("southerneast")
 #s.s4_search_party_number("Asia", 10)
 #s.s5_search_top_electricity_consumption(5)
-s.s6_search_domain_region(true, 60)
+s.s6_search_domain_region(true, 80)
+s.s6_search_domain_region(false, 50)

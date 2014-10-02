@@ -30,8 +30,8 @@
       <file leaf-file-name="helloWorld.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/helloWorld.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5283447" vertical-offset="2797" max-vertical-offset="3540">
-              <caret line="405" column="15" selection-start-line="0" selection-start-column="0" selection-end-line="433" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.25170067" vertical-offset="2829" max-vertical-offset="3555">
+              <caret line="399" column="30" selection-start-line="0" selection-start-column="0" selection-end-line="434" selection-end-column="36" />
               <folding>
                 <element signature="e#577#768#0" expanded="false" />
                 <element signature="e#770#963#0" expanded="false" />
@@ -746,8 +746,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/helloWorld.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5283447" vertical-offset="2797" max-vertical-offset="3540">
-          <caret line="405" column="15" selection-start-line="0" selection-start-column="0" selection-end-line="433" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.25170067" vertical-offset="2829" max-vertical-offset="3555">
+          <caret line="399" column="30" selection-start-line="0" selection-start-column="0" selection-end-line="434" selection-end-column="36" />
           <folding>
             <element signature="e#577#768#0" expanded="false" />
             <element signature="e#770#963#0" expanded="false" />
