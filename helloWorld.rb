@@ -91,7 +91,7 @@ class Solution
   attr_accessor :country_lists
 
   def initialize
-    @country_lists = []
+    @country_lists = Hash.new []
     @CIA_URL =  %Q|https://www.cia.gov/library/publications/the-world-factbook/print/textversion.html|
   end
 
@@ -100,18 +100,22 @@ class Solution
     puts "collecting countries infomation.."
     doc = Nokogiri::HTML(open(@CIA_URL))
 
-    doc.css("ul#GetAppendix_TextVersion li a").each do |country|
-      country_name = country.text
+    doc.css("ul#GetAppendix_TextVersion li a").each do |item|
+      country_name = item.text
       next if country_name == "World"
       country_url =  @CIA_URL
       new_url = (country_url.split('/')[0..-2]).join('/')
-      country_url = new_url << '/' << country['href']
-
-      #   puts "#{country_name}"
+      country_url = new_url << '/' << item['href']
+   #   puts "#{country_name}"
       f = open(country_url)
       doc = f.read()
       f.close()
-      @country_lists << (CountryURL.new(country_name, country_url, doc))
+      country = CountryURL.new(country_name, country_url, doc)
+      continent = get_continent(doc)
+      if continent != nil
+        continent.downcase!
+        @country_lists[continent] += [country]
+      end
     end
   end
 
@@ -120,6 +124,22 @@ class Solution
     @country_lists.each do |country|
       puts puts "#{country.country_name}\t#{}"
     end
+  end
+
+  # get a country's continent
+  def get_continent(country_doc)
+    my_html = Nokogiri::HTML(country_doc)
+    doc = my_html.at("table tr td div.region1 a")
+    region = nil
+    if doc != nil then
+      region = doc.text.to_s
+      if str_include?(region, 'Asia')
+        region = 'Asia'
+      elsif str_include?(region, 'middle east')
+        region = 'Asia'
+      end
+    end
+    return region
   end
 
   def get_hemisphere(geographicCoordinates)
@@ -150,6 +170,7 @@ class Solution
   end
 
   #check if is belong to a continent
+  #is deprecated
   def is_belong_to?(country, target_continent)
     my_html = Nokogiri::HTML(country.country_doc)
     doc = my_html.at("table tr td div.region1 a")
@@ -169,10 +190,9 @@ class Solution
     continent_country_lists = []
     puts "========================================================================"
     puts "getting countries in continent: '#{target_continent}'that are prone to natural hazard'#{target_word}':"
-
-    @country_lists.each do |country|
-      # check if this country  prone to earthquakes.
-      if is_belong_to?(country, target_continent) == true
+    target_continent.downcase!
+    if @country_lists.has_key?(target_continent)
+      @country_lists[target_continent].each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Natural hazards']")
         if doc != nil
@@ -182,7 +202,6 @@ class Solution
           end
         end
       end
-
     end
     continent_country_lists.each do |x|
       puts "#{x}   "
@@ -195,10 +214,10 @@ class Solution
     country_list = []
     puts "========================================================================"
     puts "getting countries\' elevation point in continent: '#{target_continent}':"
-
-    @country_lists.each do |country|
+    target_continent.downcase!
+    if @country_lists.has_key?(target_continent)
+      @country_lists[target_continent].each do |country|
  #     puts country.country_name
-      if is_belong_to?(country, target_continent) == true
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Elevation extremes']")
         if doc != nil
@@ -233,40 +252,51 @@ class Solution
     la = hemisphere[/south|north/i].to_s
     lo = hemisphere[/west|east/i].to_s
     geo = la + lo
-    @country_lists.each do |country|
-      my_html = Nokogiri::HTML(country.country_doc)
-      doc = my_html.at("table tr td a[title='Notes and Definitions: Geographic coordinates']")
-      if doc != nil
-        tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(',')
-        if tmpText != nil
-          latitude = Latitude.new((tmpText[0][/[NS]/]).to_s, (tmpText[0][/\d+/]).to_i)
-          longitude = Longitude.new((tmpText[1][/[EW]/]).to_s, (tmpText[0][/\d+/]).to_i)
-     #     print latitude.to_s
-     #     print longitude.to_s
-          gc = GeographicCoordinates.new(latitude, longitude)
-     #     puts get_hemisphere(gc)
-          if !!get_hemisphere(gc).match(/#{geo}/i)
-            country_list << country.country_name
+    @country_lists.each do |key, array|
+      array.each do |country|
+        my_html = Nokogiri::HTML(country.country_doc)
+        doc = my_html.at("table tr td a[title='Notes and Definitions: Geographic coordinates']")
+        if doc != nil
+          tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(',')
+          if tmpText != nil
+            latitude = Latitude.new((tmpText[0][/[NS]/]).to_s, (tmpText[0][/\d+/]).to_i)
+            longitude = Longitude.new((tmpText[1][/[EW]/]).to_s, (tmpText[0][/\d+/]).to_i)
+       #     print latitude.to_s
+       #     print longitude.to_s
+            gc = GeographicCoordinates.new(latitude, longitude)
+       #     puts get_hemisphere(gc)
+            if !!get_hemisphere(gc).match(/#{geo}/i)
+              country_list << country.country_name
+              puts country.country_name
+            end
           end
         end
       end
     end
-    country_list.each { |c| puts c.to_s}
     country_list
   end
 
   def s4_search_party_number(target_continent, number)
+    #/\[[A-Za-z0-9_]*\s*[A-Za-z0-9_]*\]/m
+    #/\[[^\[]*\]/m
+    #/\[[^\[\]]*\]/m
     country_list = []
     puts "========================================================================"
     puts "getting countries\' that have #{number} parties in continent: '#{target_continent}':"
-    @country_lists.each do |country|
-      if is_belong_to?(country, target_continent) == true
+    target_continent.downcase!
+    if @country_lists.has_key?(target_continent)
+      @country_lists[target_continent].each do |country|
+        puts country.country_name
         my_html = Nokogiri::HTML(country.country_doc)
-        doc = my_html.at("table tr td a[title='Notes and Definitions: Elevation extremes']")
+        doc = my_html.at("table tr td a[title='Notes and Definitions: Political parties and leaders']")
         if doc != nil
-          tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s
-          elev_point = (tmpText[/-?\d+/]).to_i
-          country_list << (CountryElev.new(country.country_name.to_s, elev_point))
+          tmpText = doc.parent.parent.parent.next_element.at('td')
+          text1 = ""
+          tmpText.css('div').each do |t|
+            text1 += t.text
+            text1 += " "
+          end
+          puts text1
         end
       end
     end
@@ -279,6 +309,8 @@ end
 s = Solution.new
 s.get_all_countries
 
+#puts country_lists.keys
 s.s1_search_natural_hazards("South America", "earthquake")
 s.s2_search_lowest_elevation_point("Europe")
 s.s3_search_hemisphere("southeastern")
+#s.s4_search_party_number("Asia", 10)
