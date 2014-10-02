@@ -174,6 +174,19 @@ class Solution
     end
   end
 
+  def compute_consumption(num, unity)
+    u = 1
+    unity.downcase!
+    if unity == "trillion"
+      u = 1e12
+    elsif unity == "billion"
+      u = 1e9
+    elsif unity == "million"
+      u = 1e6
+    end
+    result = num * u
+    return result
+  end
   #check if is belong to a continent
   #is deprecated
   def is_belong_to?(country, target_continent)
@@ -272,12 +285,14 @@ class Solution
        #     puts get_hemisphere(gc)
             if !!get_hemisphere(gc).match(/#{geo}/i)
               country_list << country.country_name
-              puts country.country_name
+       #       puts country.country_name
             end
           end
         end
       end
     end
+    country_list.sort!
+    country_list.each{ |x| puts x}
     country_list
   end
 
@@ -304,6 +319,7 @@ class Solution
           #  puts text1.scan(/\[[^\[\]]*\]/m).to_s
           num = text1.scan(/\[[^\[\]]*\]/m).size
           if num > number
+            puts country.country_name
             country_list << country.country_name
           end
         end
@@ -313,7 +329,8 @@ class Solution
 
   end
 
-  def s5_search_top_electricity_consumption_per_capita(topNumber)
+  #per captia
+  def s5_search_top_electricity_consumption(topNumber)
     puts "========================================================================"
     puts "getting top #{topNumber} countries with highest electricity consumption per capita:"
     country_lists = []
@@ -321,14 +338,30 @@ class Solution
       array.each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Electricity - consumption']")
+        puts country.country_name
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(' ')
-          puts tmpText
+          print tmpText[0], tmpText[1]
+          num = tmpText[0].gsub(',','').to_f
+          num = compute_consumption(num, tmpText[1].to_s)
+          puts num
         end
+
+        doc = my_html.at("table tr td a[title='Notes and Definitions: Population']")
+        population = 0
+        if doc != nil
+          tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(' ')
+          population = tmpText[0].gsub(',','').to_f
+          puts population
+        end
+        result = 0
+        if population != 0
+          result = num / population
+        end
+        country_lists << (CountryComparable.new(country.country_name, result))
       end
     end
-
-
+    tmp = "finished"
   end
 end
 
@@ -339,5 +372,8 @@ s.get_all_countries
 #puts country_lists.keys
 s.s1_search_natural_hazards("South America", "earthquake")
 s.s2_search_lowest_elevation_point("Europe")
-s.s3_search_hemisphere("southeastern")
+s.s3_search_hemisphere("southerneast")
 s.s4_search_party_number("Asia", 10)
+#s.s5_search_top_electricity_consumption(5)
+a = 1
+puts a
