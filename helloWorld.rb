@@ -384,6 +384,7 @@ class Solution
 end
 
 
+
 s = Solution.new
 s.get_all_countries
 
