@@ -287,7 +287,7 @@ class Solution
     #/\[[^\[\]]*\]/m
     country_list = []
     puts "========================================================================"
-    puts "getting countries\' that have #{number} parties in continent: '#{target_continent}':"
+    puts "getting countries\' that have more than #{number} parties in continent: '#{target_continent}':"
     target_continent.downcase!
     if @country_lists.has_key?(target_continent)
       @country_lists[target_continent].each { |country|
@@ -303,7 +303,7 @@ class Solution
           end
           #  puts text1.scan(/\[[^\[\]]*\]/m).to_s
           num = text1.scan(/\[[^\[\]]*\]/m).size
-          if num >= number
+          if num > number
             country_list << country.country_name
           end
         end
@@ -320,21 +320,10 @@ class Solution
     @country_lists.each do |key, array|
       array.each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
-        doc = my_html.at("table tr td a[title='Notes and Definitions: Geographic coordinates']")
+        doc = my_html.at("table tr td a[title='Notes and Definitions: Electricity - consumption']")
         if doc != nil
-          tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(',')
-          if tmpText != nil
-            latitude = Latitude.new((tmpText[0][/[NS]/]).to_s, (tmpText[0][/\d+/]).to_i)
-            longitude = Longitude.new((tmpText[1][/[EW]/]).to_s, (tmpText[0][/\d+/]).to_i)
-            #     print latitude.to_s
-            #     print longitude.to_s
-            gc = GeographicCoordinates.new(latitude, longitude)
-            #     puts get_hemisphere(gc)
-            if !!get_hemisphere(gc).match(/#{geo}/i)
-              country_list << country.country_name
-              puts country.country_name
-            end
-          end
+          tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(' ')
+          puts tmpText
         end
       end
     end
