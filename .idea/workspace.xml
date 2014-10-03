@@ -30,8 +30,8 @@
       <file leaf-file-name="helloWorld.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/helloWorld.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.35643566" vertical-offset="2814" max-vertical-offset="3465">
-              <caret line="482" column="13" selection-start-line="482" selection-start-column="13" selection-end-line="482" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.48019803" vertical-offset="2214" max-vertical-offset="3450">
+              <caret line="379" column="12" selection-start-line="0" selection-start-column="0" selection-end-line="504" selection-end-column="29" />
               <folding>
                 <element signature="e#577#768#0" expanded="false" />
                 <element signature="e#770#963#0" expanded="false" />
@@ -363,7 +363,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="ruby-line">
           <url>file://$PROJECT_DIR$/helloWorld.rb</url>
-          <line>498</line>
+          <line>497</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="ruby-line">
@@ -812,8 +812,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/helloWorld.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35643566" vertical-offset="2814" max-vertical-offset="3465">
-          <caret line="482" column="13" selection-start-line="482" selection-start-column="13" selection-end-line="482" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.48019803" vertical-offset="2214" max-vertical-offset="3450">
+          <caret line="379" column="12" selection-start-line="0" selection-start-column="0" selection-end-line="504" selection-end-column="29" />
           <folding>
             <element signature="e#577#768#0" expanded="false" />
             <element signature="e#770#963#0" expanded="false" />
