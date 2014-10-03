@@ -102,7 +102,7 @@ class Solution
 
     doc.css("ul#GetAppendix_TextVersion li a").each do |item|
       country_name = item.text
-      next if country_name == "World"
+      next if country_name == "World" or country_name == "European Union"
       country_url =  @CIA_URL
       new_url = (country_url.split('/')[0..-2]).join('/')
       country_url = new_url << '/' << item['href']
@@ -453,6 +453,40 @@ class Solution
     country_list.each{ |x| puts x}
     tmp = "finished"
   end
+
+  def s8_search_top_coastline(topNumber)
+    puts "==================================================================================="
+    puts "getting top #{topNumber} countries by length of coastline"
+    puts "-----------------------------------------------------------------------------------"
+    country_list = []
+    @country_lists.each do |key, array|
+      array.each do |country|
+        my_html = Nokogiri::HTML(country.country_doc)
+        doc = my_html.at("table tr td a[title='Notes and Definitions: Coastline']")
+  #      print country.country_name
+        if doc != nil
+
+          item = doc.parent.parent.parent.next_element.at('div')
+          next if item == nil
+          coastline = item.text
+          coastline.gsub!(',', '')
+          coastline = coastline.match(/\d+/).to_s.to_i
+  #        puts coastline
+          country_list << (CountryComparable.new(country.country_name, coastline))
+        end
+      end
+    end
+    country_list.sort!.reverse!
+    country_list.each{ |x| puts x}
+    result_list = []
+    i = 0
+    while i < topNumber
+      puts country_list[i].to_s
+      i += 1
+    end
+    tmp = "finished"
+  end
+
 end
 
 
@@ -468,4 +502,5 @@ s.get_all_countries
 #s.s5_search_top_electricity_consumption(5)
 #s.s6_search_domain_region(true, 80)
 #s.s6_search_domain_region(false, 50)
-s.s7_search_landlocked()
+#s.s7_search_landlocked()
+s.s8_search_top_coastline(10)
