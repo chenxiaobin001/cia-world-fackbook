@@ -103,7 +103,7 @@ class Solution
 
     doc.css("ul#GetAppendix_TextVersion li a").each do |item|
       country_name = item.text
-      next if country_name == "World" or country_name == "European Union"
+      next if country_name == "World" or country_name == "European Union" or country_name == "Antarctica"
       country_url =  @CIA_URL
       new_url = (country_url.split('/')[0..-2]).join('/')
       country_url = new_url << '/' << item['href']
@@ -238,7 +238,7 @@ class Solution
     target_continent.downcase!
     if @country_lists.has_key?(target_continent)
       @country_lists[target_continent].each do |country|
- #     puts country.country_name
+        #     puts country.country_name
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Elevation extremes']")
         if doc != nil
@@ -283,13 +283,13 @@ class Solution
           if tmpText != nil
             latitude = Latitude.new((tmpText[0][/[NS]/]).to_s, (tmpText[0][/\d+/]).to_i)
             longitude = Longitude.new((tmpText[1][/[EW]/]).to_s, (tmpText[0][/\d+/]).to_i)
-       #     print latitude.to_s
-       #     print longitude.to_s
+            #     print latitude.to_s
+            #     print longitude.to_s
             gc = GeographicCoordinates.new(latitude, longitude)
-       #     puts get_hemisphere(gc)
+            #     puts get_hemisphere(gc)
             if !!get_hemisphere(gc).match(/#{geo}/i)
               country_list << country.country_name
-       #       puts country.country_name
+              #       puts country.country_name
             end
           end
         end
@@ -311,7 +311,7 @@ class Solution
     target_continent.downcase!
     if @country_lists.has_key?(target_continent)
       @country_lists[target_continent].each { |country|
-     #   puts country.country_name
+        #   puts country.country_name
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Political parties and leaders']")
         if doc != nil
@@ -347,14 +347,14 @@ class Solution
       array.each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Electricity - consumption']")
-    #    puts country.country_name
+        #    puts country.country_name
         num = 0
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(' ')
-     #     print tmpText[0], tmpText[1]
+          #     print tmpText[0], tmpText[1]
           num = tmpText[0].gsub(',','').to_f
           num = compute_consumption(num, tmpText[1].to_s)
-     #     puts num
+          #     puts num
         end
 
         doc = my_html.at("table tr td a[title='Notes and Definitions: Population']")
@@ -362,7 +362,7 @@ class Solution
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(' ')
           population = tmpText[0].gsub(',','').to_f
-     #     puts population
+          #     puts population
         end
         result = 0
         if population != 0
@@ -383,7 +383,7 @@ class Solution
     tmp = "finished"
   end
 
-  def s6_search_domain_region(moreThan, percentage)
+  def s6_search_domain_religion(moreThan, percentage)
     direct = "more than"
     if moreThan == false
       direct = "less than"
@@ -396,7 +396,7 @@ class Solution
       array.each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Religions']")
-    #    puts country.country_name
+        #    puts country.country_name
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(',')
           rel = []
@@ -437,7 +437,7 @@ class Solution
       array.each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Land boundaries']")
-     #   puts country.country_name
+        #   puts country.country_name
         if doc != nil
 
           items = doc.parent.parent.parent.next_element.at('td')
@@ -446,7 +446,7 @@ class Solution
           borders = borders.at('span').text
           borders.gsub!("km (", "km,")
           border_lsit = borders.split('km,')
-     #     puts border_lsit
+          #     puts border_lsit
           num =  border_lsit.length
           if num == 1
             doc = my_html.at("table tr td a[title='Notes and Definitions: Location']")
@@ -473,7 +473,7 @@ class Solution
       array.each do |country|
         my_html = Nokogiri::HTML(country.country_doc)
         doc = my_html.at("table tr td a[title='Notes and Definitions: Coastline']")
-  #      print country.country_name
+        #      print country.country_name
         if doc != nil
 
           item = doc.parent.parent.parent.next_element.at('div')
@@ -481,7 +481,7 @@ class Solution
           coastline = item.text
           coastline.gsub!(',', '')
           coastline = coastline.match(/\d+/).to_s.to_i
-  #        puts coastline
+          #        puts coastline
           country_list << (CountryComparable.new(country.country_name, coastline))
         end
       end
@@ -509,7 +509,7 @@ s.s2_search_lowest_elevation_point("Europe")
 s.s3_search_hemisphere("southerneast")
 s.s4_search_party_number("Asia", 10)
 s.s5_search_top_electricity_consumption(5)
-s.s6_search_domain_region(true, 80)
-s.s6_search_domain_region(false, 50)
+s.s6_search_domain_religion(true, 80)
+s.s6_search_domain_religion(false, 50)
 s.s7_search_landlocked()
 s.s8_search_top_coastline(10)
