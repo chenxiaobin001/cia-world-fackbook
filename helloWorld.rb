@@ -69,7 +69,7 @@ end
 
 # a class to record country's name, URL, URL_doc
 
-class CountryURL
+class CountryInfo
 
   attr_accessor :country_name
   attr_accessor :country_URL
@@ -111,7 +111,7 @@ class Solution
       f = open(country_url)
       doc = f.read()
       f.close()
-      country = CountryURL.new(country_name, country_url, doc)
+      country = CountryInfo.new(country_name, country_url, doc)
       continent = get_continent(doc)
       if continent != nil
         continent.downcase!
@@ -504,12 +504,12 @@ s = Solution.new
 s.get_all_countries
 
 #puts country_lists.keys
-#s.s1_search_natural_hazards("South America", "earthquake")
-#s.s2_search_lowest_elevation_point("Europe")
-#s.s3_search_hemisphere("southerneast")
-#s.s4_search_party_number("Asia", 10)
-#s.s5_search_top_electricity_consumption(5)
+s.s1_search_natural_hazards("South America", "earthquake")
+s.s2_search_lowest_elevation_point("Europe")
+s.s3_search_hemisphere("southerneast")
+s.s4_search_party_number("Asia", 10)
+s.s5_search_top_electricity_consumption(5)
 s.s6_search_domain_region(true, 80)
 s.s6_search_domain_region(false, 50)
-#s.s7_search_landlocked()
-#s.s8_search_top_coastline(10)
+s.s7_search_landlocked()
+s.s8_search_top_coastline(10)
