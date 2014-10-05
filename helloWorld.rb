@@ -16,6 +16,7 @@ class CountryComparable
   include Comparable
   attr_accessor :country_name
   attr_accessor :country_value
+  attr_accessor :country_attr
 
   def <=>(that)
     country_value <=> that.country_value
@@ -398,22 +399,31 @@ class Solution
     #    puts country.country_name
         if doc != nil
           tmpText = doc.parent.parent.parent.next_element.at('div').text.to_s.split(',')
-          rel = tmpText[0].match(/\s*[a-zA-Z]+\s*/m).to_s
+          rel = []
+          if moreThan
+            rel << tmpText[0].match(/[a-zA-Z -]+/).to_s
+          else
+            tmpText.each {|t| rel << (t.match(/[a-zA-Z -]+/).to_s)}
+          end
           per = tmpText.to_s.match(/\d+.?\d+/).to_s.to_f
           if moreThan
             if per > percentage
-              country_list << (CountryComparable.new(country.country_name, per))
+              c = CountryComparable.new(country.country_name, per)
+              c.country_attr = rel
+              country_list << c
             end
           else
             if per < percentage
-              country_list << (CountryComparable.new(country.country_name, per))
+              c = CountryComparable.new(country.country_name, per)
+              c.country_attr = rel
+              country_list << c
             end
           end
         end
       end
     end
     country_list.sort!
-    country_list.each { |c| puts c.country_name + " " + c.country_value.to_s}
+    country_list.each { |c| puts c.country_name + " " +  c.country_attr.to_s}
     tmp = "finished"
 
   end
@@ -494,12 +504,12 @@ s = Solution.new
 s.get_all_countries
 
 #puts country_lists.keys
-s.s1_search_natural_hazards("South America", "earthquake")
-s.s2_search_lowest_elevation_point("Europe")
-s.s3_search_hemisphere("southerneast")
-s.s4_search_party_number("Asia", 10)
-s.s5_search_top_electricity_consumption(5)
+#s.s1_search_natural_hazards("South America", "earthquake")
+#s.s2_search_lowest_elevation_point("Europe")
+#s.s3_search_hemisphere("southerneast")
+#s.s4_search_party_number("Asia", 10)
+#s.s5_search_top_electricity_consumption(5)
 s.s6_search_domain_region(true, 80)
 s.s6_search_domain_region(false, 50)
-s.s7_search_landlocked()
-s.s8_search_top_coastline(10)
+#s.s7_search_landlocked()
+#s.s8_search_top_coastline(10)
